@@ -137,16 +137,16 @@ class CommandHandlerTest {
     }
 
     @Test
-    void intValueGiven() {
+    void intCommand() {
         // gets int value after a letter in a string
         String val = "i10";
         String val1 = "i";
         String val2 = "i 5";
         String val3 = "i -5";
-        assertAll(() -> assertEquals(10, CommandHandler.intValueGiven(val)), // test valid number with no space
-                () -> assertEquals(-1, commandHandler.intValueGiven(val1)), // test no number given
-                () -> assertEquals(5, commandHandler.intValueGiven(val2)), // test valid number with space
-                () -> assertEquals(-1, commandHandler.intValueGiven(val3))); // test invalid number
+        assertAll(() -> assertEquals(10, CommandHandler.intCommand(val)), // test valid number with no space
+                () -> assertEquals(-1, commandHandler.intCommand(val1)), // test no number given
+                () -> assertEquals(5, commandHandler.intCommand(val2)), // test valid number with space
+                () -> assertEquals(-1, commandHandler.intCommand(val3))); // test invalid number
     }
 
     @Test
