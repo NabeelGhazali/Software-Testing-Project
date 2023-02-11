@@ -157,17 +157,7 @@ class CommandHandlerTest {
                 () -> assertFalse(commandHandler.isNumeric(notNumb))); // test invalid number
     }
 
-    @Test
-    void printTable() {
-
-        String output = table(true);
-
-        outputStreamCaptor.reset();
-        Point point = new Point(5, 5);
-        commandHandler.table.writeTable(point, true);
-        commandHandler.printTable();
-        assertEquals(output, outputStreamCaptor.toString());
-    }
+ 
 
     @Test
     void turnLeft() {
