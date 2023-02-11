@@ -1,6 +1,6 @@
-#Software-Testing-Project
+**Software-Testing-Project
 
-##COEN6761_ Project (RunTime Terror)
+**COEN6761_ Project (RunTime Terror)
 
 **Contributors**
 
