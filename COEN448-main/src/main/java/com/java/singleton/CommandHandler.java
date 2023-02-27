@@ -19,18 +19,19 @@ public class CommandHandler {
     public CommandHandler(){}
 
     /**
-     * UI of the client
-     * displays commands to server and handles them
+     * UI for displaying commands 
      */
     public static void ui() {
-        String value = "";    //input from user
+        String value = "";    //input is stored in value variable
 
-        //ui
-        System.out.println("Please enter your command: ");
+        //user_interface(ui)
+        System.out.println("Hello My name is Jarvis!!!"
+        		+ "Please enter your command: ");
         value = sc.nextLine();
 
         if(handleInput(value,false)){
-            //end
+            
+        	//end of the process
             System.out.println("\"Jarvis is low on battery Jarvis is .. dy...\"");
         }
     }
@@ -39,33 +40,37 @@ public class CommandHandler {
         if (value.isEmpty()) {
             value = "-1";
         }
-        //Longest command is at capped at 5 string char
-        //For ex: "I 100"
+        //Longest command is reduced to 5 character string
+        
         if (value.length()>6) {
             value = "-1";
         }
         //number given for initialization and move spaces
         int number = 0;
 
-        //if m or I is entered alone without a number
-        if((value.charAt(0) == 'M' || value.charAt(0) == 'm' || value.charAt(0) == 'I' || value.charAt(0) == 'i')
+        //if initialize or Move command is entered without a number check
+        
+        
+        if((value.charAt(0) == 'I' || value.charAt(0) == 'i' || value.charAt(0) == 'M' || value.charAt(0) == 'm')
                 && value.length()==1) {
-            value = "x"; //incorrect input
+            value = "x"; //input is incorrect
         }
-        else if(value.charAt(0) == 'I' || value.charAt(0) == 'i') { //if I input, initialization requested
-            //get number given
+        else if(value.charAt(0) == 'I' || value.charAt(0) == 'i') { //if I input, initialization start
+            
+        	//getting the initialization number
             number = intValueGiven(value);
-            //if number is negative, invalid input
+            //if number is negative,or just 1 the minimum allowed value should be more than 2 maximum value is capped at 100
             if((number < 2) || (number > 100)) {
                 value = "x";
             } else {
                 value = "I";
             }
         }
-        else if(value.charAt(0) == 'M' || value.charAt(0) == 'm') { //if m input, move requested
-            //get number given
+        else if(value.charAt(0) == 'M' || value.charAt(0) == 'm') { //if m input, move started
+            
+        	//getting the value for the desired movement
             number = intValueGiven(value);
-            //if number is negative, invalid input
+            //number should be positive integer
             if(number <=0) {
                 if(value.equals("MENU") || value.equals("menu")){}
                 else
@@ -75,8 +80,10 @@ public class CommandHandler {
             }
         }
 
-        //cases for every possible commands
-        //make sure system is initialized before accepting any other command
+        //For every desired command switch cases
+        
+        // with each command case checking the system is initialized or not
+        
         switch (value) {
             case "menu":
             case "MENU":
@@ -145,15 +152,7 @@ public class CommandHandler {
                 }else
                     System.out.println("Please initialize the system first");
                 break;
-            case "h":
-            case "H":
-                //run history of commands
-                if (!commands.isEmpty()){
-                    runHistory();
-                }else
-                    System.out.println("Please run a few commands before.");
-
-                break;
+            
             case "q":
             case "Q":
                 return true;
@@ -168,30 +167,31 @@ public class CommandHandler {
         return false;
     }
 
-    //get the number entered from the string
+    //getting the number from the string 
+    
     public static int intValueGiven(String value)
     {
         int number = 0;
-        String temp;
+        String var;
 
-        //get int from char
+        //Getting integer 
+        
         StringBuilder sb = new StringBuilder(value);
         sb.deleteCharAt(0);
-        temp = removeBlankSpace(sb);
+        var = removeBlankSpace(sb);
 
-        if(isNumeric(temp)){
-            //save given number
-            number = Integer.parseInt(temp);
+        if(isNumeric(var)){
+          
+            number = Integer.parseInt(var);
         }else{
-            //invalid format
+            //invalid
             number = -1;
         }
-        //System.out.println("number is:" + number);
 
         return number;
     }
 
-    //remove whitespaces from the string
+    //removing blank spaces from the string
     public static String removeBlankSpace(StringBuilder sb) {
         int j = 0;
         for(int i = 0; i < sb.length(); i++) {
@@ -208,17 +208,6 @@ public class CommandHandler {
         return str != null && str.matches("[0-9.]+");
     }
 
-    //Replay all the commands entered by the user as a history
-    public static void runHistory(){
-        flag = true;
-        for (String str : commands) {
-            System.out.println("\nHistory command:" + str + "\n");
-            handleInput(str,true);
-        }
-
-        commands.clear();
-        flag = false;
-    }
     //print the position of the robot
     public static void printPosition() {
         if(!flag)
@@ -237,18 +226,18 @@ public class CommandHandler {
         else
             pen = "up";
 
-        //get direction of the pen
+        //direction of the pen
         String direction = robot.getDirection();
 
-        //print position
+        //position of the robot
         System.out.println("Position: " + y + ", " + x + " - Pen: " + pen + " - Facing: " + direction);
     }
 
-    //print the table along with the coordinates of the robot and the orientation of the pen
+    //table along with the coordinates of the robot and the orientation of the pen
     public static void printTable() {
         if(!flag)
             commands.add("p");
-        //System.out.println("Printing table...");
+        
         table.printTable(robot.getCoordinates(), robot.getPenState());
     }
 
@@ -302,14 +291,14 @@ public class CommandHandler {
         }
     }
 
-    //turn the robot left
+    //turnLeft function to turn the robot left
     public static void turnLeft() {
         if(!flag)
             commands.add("l");
         System.out.println("Jarvis Turning left...");
         String currentDirection = robot.getDirection();
 
-        //turn correct direction, depending on current direction
+       // The current direction is changed based on the input given
         switch (currentDirection) {
             case "north":
                 robot.setDirectionWest();
@@ -326,7 +315,7 @@ public class CommandHandler {
         }
     }
 
-    //turn the robot right
+    //turnRight function to turn the robot right
     public static void turnRight() {
         if(!flag)
             commands.add("r");
@@ -351,7 +340,7 @@ public class CommandHandler {
         }
     }
 
-    //make the pen face down
+    //the pen down 
     public static void penDown() {
         if(!flag)
             commands.add("d");
@@ -361,11 +350,12 @@ public class CommandHandler {
         } else{
             System.out.println("Pen direction going down...");
             robot.setPenState(true);
-            table.writeTable(robot.getCoordinates(), true);//when pen is turned down, automatically write * on the current robot position
+            table.writeTable(robot.getCoordinates(), true);
+            //when pen is turned down, print * on the current robot position
         }
     }
 
-    //make the pen face up
+    //making the arrow change when pen is up
     public static void penUp() {
         if(!flag)
             commands.add("u");
@@ -378,10 +368,8 @@ public class CommandHandler {
         }
     }
 
-    //initialize the system
-    //make new table
-    //reset robot
-    //set initialized boolean
+    //initialization of the robot (Creating new table+reset+boolean initiate)
+    
     public static void initializeSystem(int size) {
         if(!flag)
             commands.add("i " + size);

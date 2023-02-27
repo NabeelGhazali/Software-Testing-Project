@@ -31,6 +31,8 @@ class CommandHandlerTest {
         System.setOut(standardOut);
     }
 
+    //TestCase 1 (Testing all the possible command and the asserting with console output)
+    
     @Test
     void handleInput() {
         /*
@@ -46,7 +48,8 @@ class CommandHandlerTest {
                         pen up and facing north. n size of the array, an integer greater than zero
            
          */
-
+    	String value00 = "P";
+        String value000 = "p";
         String value1 = "u";
         String value2 = "U";
         String value3 = "d";
@@ -56,32 +59,36 @@ class CommandHandlerTest {
         String value7 = "l";
         String value8 = "L";
         String value9 = "M 2";
-        String value10 = "m 2";
-        String value11 = "P";
-        String value12 = "p";
-        String value13 = "C";
-        String value14 = "c";
-        String value15 = "Q";
-        String value16 = "q";
-        String value17 = "I 10";
-        String value18 = "i 10";
-        String value19 = "H";
-        String value20 = "h";
-        String value21 = "";
-        String value22 = "i";
-        String value23 = "m";
-        String value24 = "i 1";
-        String value25 = "menu";
-        String value26 = "m 0";
-        String value27 = "m 10";
+        String value10 = "m 3";
+        String value11 = "C";
+        String value12 = "c";
+        String value13 = "Q";
+        String value14 = "q";
+        String value15 = "I 5";
+        String value16 = "i 7";
+        String value17 = "";
+        String value18 = "i";
+        String value19 = "m";
+        String value20 = "i 1"; //checking the minimum value of 2 for initialization
+        String value21 = "menu";
+        String value22 = "m 10";
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value11,true);
+        CommandHandler.handleInput(value00,true);
         assertEquals(table(false), outputStreamCaptor.toString());
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value12,true);
+        CommandHandler.handleInput(value000,true);
         assertEquals(table(false), outputStreamCaptor.toString());
+        
+        outputStreamCaptor.reset();
+        CommandHandler.handleInput(value15,true);
+        assertEquals("Initializing with size: 5", outputStreamCaptor.toString().trim());
+
+        outputStreamCaptor.reset();
+        CommandHandler.handleInput(value16,true);
+        assertEquals("Initializing with size: 7", outputStreamCaptor.toString().trim());
+
 
         outputStreamCaptor.reset();
         CommandHandler.handleInput(value1,true);
@@ -124,56 +131,41 @@ class CommandHandlerTest {
         assertEquals("Jarvis Moving...", outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        String output = "Position: 0, 4 - Pen: down - Facing: north";
-        CommandHandler.handleInput(value13,true);
+        String output = "Position: 0, 5 - Pen: down - Facing: north";
+        CommandHandler.handleInput(value11,true);
         assertEquals(output, outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value14,true);
+        CommandHandler.handleInput(value12,true);
         assertEquals(output, outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        assertTrue(CommandHandler.handleInput(value15,true));
+        assertTrue(CommandHandler.handleInput(value13,true));
 
         outputStreamCaptor.reset();
-        assertTrue(CommandHandler.handleInput(value16,true));
+        assertTrue(CommandHandler.handleInput(value14,true));
 
+        
         outputStreamCaptor.reset();
         CommandHandler.handleInput(value17,true);
-        assertEquals("Initializing with size: 10", outputStreamCaptor.toString().trim());
-
-        outputStreamCaptor.reset();
-        CommandHandler.handleInput(value18,true);
-        assertEquals("Initializing with size: 10", outputStreamCaptor.toString().trim());
-
-        outputStreamCaptor.reset();
-        CommandHandler.handleInput(value19,true);
-        assertTrue(commandHandler.commands.isEmpty());
-
-        outputStreamCaptor.reset();
-        CommandHandler.handleInput(value20,true);
-        assertTrue(commandHandler.commands.isEmpty());
-
-        outputStreamCaptor.reset();
-        CommandHandler.handleInput(value21,true);
         assertEquals("User selected Nothing", outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value22,true);
+        CommandHandler.handleInput(value18,true);
         assertEquals("Sorry I can not understand. Please choose a command from the menu", outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value23,true);
+        CommandHandler.handleInput(value19,true);
         assertEquals("Sorry I can not understand. Please choose a command from the menu", outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value24,true);
+        CommandHandler.handleInput(value20,true);
         assertEquals("Sorry I can not understand. Please choose a command from the menu", outputStreamCaptor.toString().trim());
 
         outputStreamCaptor.reset();
 
         output = "Enter 'Q' to close program\n"
-                 +"Possible commands:\n" +
+                 +"All Possible commands:\n" +
                 "I n: Initialize the system\n" +
                 "U: Pen Up\n" +
                 "D: Pen Down\n" +
@@ -184,48 +176,46 @@ class CommandHandlerTest {
                 "C: Print current position of the pen\n" +
                 "Q: Stop the program";
 
-        CommandHandler.handleInput(value25,true);
+        CommandHandler.handleInput(value21,true);
         assertEquals(output.replaceAll("\n", "").replaceAll("\r", ""), outputStreamCaptor.toString().trim().replaceAll("\n", "").replaceAll("\r", ""));
 
+        
         outputStreamCaptor.reset();
-        CommandHandler.handleInput(value26,true);
-        assertEquals("", outputStreamCaptor.toString().trim());
-
-        outputStreamCaptor.reset();
-        CommandHandler.handleInput(value27,true);
+        CommandHandler.handleInput(value22,true);
         assertEquals("Can not move " + 10 + " in the " + commandHandler.robot.getDirection() + " direction, the robot will fall off the table", outputStreamCaptor.toString().trim());
 
     }
 
-    @Test
-    void intValueGiven() {
-        //gets int value after a letter in a string
-        String value1 = "i10";
-        String value2 = "i";
-        String value3 = "i 5";
-        String value4 = "i -5";
-        assertAll(() -> assertEquals(10, CommandHandler.intValueGiven(value1)), //test valid number with no space
-                () -> assertEquals(-1,commandHandler.intValueGiven(value2)),   //test no number given
-                () -> assertEquals(5,commandHandler.intValueGiven(value3)),    //test valid number with space
-                () -> assertEquals(-1,commandHandler.intValueGiven(value4)));  //test invalid number
-    }
-
+//Test case 2 (Checking if the whitespace is removed from the input string) 
     @Test
     void removeBlankSpace() {
-        String value = " I";
+        String value = " C";
         StringBuilder sb = new StringBuilder(value);
 
-        assertEquals("I",commandHandler.removeBlankSpace(sb));
+        assertEquals("C",commandHandler.removeBlankSpace(sb));
     }
-
+    
+  //Test case 3 (Checking if after initialize and move integer value is given or not)
     @Test
     void isNumeric() {
-        String num = "10";
-        String notNum = "A";
+        String num = "5";
+        String notNum = "M";
         assertAll(() -> assertTrue(commandHandler.isNumeric(num)),    //test valid number
                 () -> assertFalse(commandHandler.isNumeric(notNum))); //test invalid number
     }
-
+  //Test case 4 (Checking if integer value is collected from the input string is correct or not while initializing or not
+    @Test
+    void intValueGiven() {
+        // finding the integer value from the input string
+        String value1 = "i8";
+        String value2 = "i";
+        String value3 = "i 3";
+        String value4 = "i -2";
+        assertAll(() -> assertEquals(8, CommandHandler.intValueGiven(value1)), //test valid number with no space
+                () -> assertEquals(-1,commandHandler.intValueGiven(value2)),   //test no number given
+                () -> assertEquals(3,commandHandler.intValueGiven(value3)),    //test valid number with space
+                () -> assertEquals(-1,commandHandler.intValueGiven(value4)));  //test invalid number
+    }
     @Test
     void printPosition() {
         String position1 = "Position: " + 0 + ", " + 0 + " - Pen: " + "up" + " - Facing: " + "north";
@@ -385,16 +375,5 @@ class CommandHandlerTest {
 
 
 
-    // Test case 11
-    @Test
-    void runHistory(){
-        commandHandler.commands.add("i10");
-        commandHandler.commands.add("m5");
-        commandHandler.commands.add("r");
-        commandHandler.commands.add("d");
-        commandHandler.commands.add("m5");
-
-        commandHandler.runHistory();
-        assertTrue(commandHandler.commands.isEmpty());
-    }
+   
 }
