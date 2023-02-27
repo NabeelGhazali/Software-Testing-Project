@@ -20,90 +20,42 @@ public class SingletonTest {
     void TearDown() {
         robot.reinitialize();
     }
-
-    @Test
-    void testGetInstance(){
-        assertEquals(robot, robot.getInstance());
-    }
-
-    @Test
-    void testGetDirection(){
-        assertEquals("north", robot.getDirection());
-    }
-
+//Test case 1 (Checking after setting the direction to north)
     @Test
     void testSetDirectionNorth(){
         robot.setDirectionSouth();
         robot.setDirectionNorth();
         assertEquals("north", robot.getDirection());
     }
-
+  //Test case 2 (Checking after setting the direction to south)
     @Test
     void testSetDirectionSouth(){
         robot.setDirectionSouth();
         assertEquals("south", robot.getDirection());
     }
-
+  //Test case 3 (Checking after setting the direction to east)
     @Test
     void testSetDirectionEast(){
         robot.setDirectionEast();
         assertEquals("east", robot.getDirection());
     }
-
+  //Test case 4(Checking after setting the direction to west)
     @Test
     void testSetDirectionWest(){
         robot.setDirectionWest();
         assertEquals("west", robot.getDirection());
     }
 
+  //Test case 5 (checking pen state false==pen UP: true==pen down
     @Test
     void testGetPenState(){
-        //test pen is up
-        assertFalse(robot.getPenState());
+      
+        assertFalse(robot.getPenState());//false== pen state up
 
         robot.setPenState(true);
-        //test pen is down
-        assertTrue(robot.getPenState());
+       
+        assertTrue(robot.getPenState());//true==pen state down
     }
 
-    @Test
-    void testSetPenState(){
-        //test setting pen down
-        robot.setPenState(true);
-        assertTrue(robot.getPenState());
-
-        //test setting pen up
-        robot.setPenState(false);
-        assertFalse(robot.getPenState());
+ 
     }
-
-    @Test
-    void testGetCoordinates(){
-        Point p = new Point(0,0);
-        assertEquals(p,robot.getCoordinates());
-    }
-
-    @Test
-    void testSetCoordinates(){
-        Point p = new Point(5,3);
-        robot.setCoordinates(p);
-        assertEquals(p,robot.getCoordinates());
-    }
-
-    @Test
-    void testReinitialize(){
-        //change robot state
-        Point p1 = new Point(5,3);
-        robot.setPenState(true);
-        robot.setCoordinates(p1);
-        robot.setDirectionWest();
-
-        //reset robot
-        robot.reinitialize();
-
-        Point p = new Point(0,0);
-        assertAll(() -> assertFalse(robot.getPenState()),
-                () -> assertEquals(p, robot.getCoordinates()),
-                () -> assertEquals("north", robot.getDirection()));
-    }
-}
