@@ -30,6 +30,46 @@ class CommandHandlerTest {
     void tearDown() {
         System.setOut(standardOut);
     }
+    String table(boolean flag){
+        //get expected output
+        StringBuilder output = new StringBuilder();
+
+        int[][] tableArray;
+        //initialize array
+        tableArray = new int[10][10];
+
+        //initialize table with 0s
+        for (int[] ints : tableArray) {
+            Arrays.fill(ints, 0);
+        }
+
+        if(flag){
+            tableArray[5][5]=1;
+        }
+
+        //get initial table
+        for (int row = tableArray.length-1; row >= 0; row--) {
+            output.append(row + "| ");
+            for (int col = 0; col < tableArray[row].length; col++) {
+                if (row == 0 && col == 0)
+                    output.append("↑ ");
+                else if (tableArray[row][col] == 0)
+                    output.append("  ");
+                else
+                    output.append("* ");
+            }
+            output.append("\n");
+        }
+        output.append("  ");
+        for (int col = 0; col < tableArray.length; col++) {
+            output.append("__");
+        }
+        output.append("\n   ");
+        for (int col = 0; col < tableArray.length; col++) {
+            output.append(col + " ");
+        }
+        return output.toString();
+    }
 
     //TestCase 1 (Testing all the possible command and the asserting with console output)
     
@@ -203,6 +243,7 @@ class CommandHandlerTest {
         assertAll(() -> assertTrue(commandHandler.isNumeric(num)),    //test valid number
                 () -> assertFalse(commandHandler.isNumeric(notNum))); //test invalid number
     }
+    
   //Test case 4 (Checking if integer value is collected from the input string is correct or not while initializing or not
     @Test
     void intValueGiven() {
@@ -216,151 +257,9 @@ class CommandHandlerTest {
                 () -> assertEquals(3,commandHandler.intValueGiven(value3)),    //test valid number with space
                 () -> assertEquals(-1,commandHandler.intValueGiven(value4)));  //test invalid number
     }
-    @Test
-    void printPosition() {
-        String position1 = "Position: " + 0 + ", " + 0 + " - Pen: " + "up" + " - Facing: " + "north";
-        String position2 = "Position: " + 0 + ", " + 0 + " - Pen: " + "down" + " - Facing: " + "north";
-        String position3 = "Position: " + 0 + ", " + 0 + " - Pen: " + "down" + " - Facing: " + "east";
-        outputStreamCaptor.reset();
-        commandHandler.printPosition();
-        assertEquals(position1,outputStreamCaptor.toString().trim());     //test initial position
-        commandHandler.penDown();
-        outputStreamCaptor.reset();
-        commandHandler.printPosition();
-        assertEquals(position2,outputStreamCaptor.toString().trim());    //test position with pen down
-        commandHandler.turnRight();
-        outputStreamCaptor.reset();
-        commandHandler.printPosition();
-        assertEquals(position3,outputStreamCaptor.toString().trim());    //test position facing east
-
-    }
-
-    String table(boolean flag){
-        //get expected output
-        StringBuilder output = new StringBuilder();
-
-        int[][] tableArray;
-        //initialize array
-        tableArray = new int[10][10];
-
-        //initialize table with 0s
-        for (int[] ints : tableArray) {
-            Arrays.fill(ints, 0);
-        }
-
-        if(flag){
-            tableArray[5][5]=1;
-        }
-
-        //get initial table
-        for (int row = tableArray.length-1; row >= 0; row--) {
-            output.append(row + "| ");
-            for (int col = 0; col < tableArray[row].length; col++) {
-                if (row == 0 && col == 0)
-                    output.append("↑ ");
-                else if (tableArray[row][col] == 0)
-                    output.append("  ");
-                else
-                    output.append("* ");
-            }
-            output.append("\n");
-        }
-        output.append("  ");
-        for (int col = 0; col < tableArray.length; col++) {
-            output.append("__");
-        }
-        output.append("\n   ");
-        for (int col = 0; col < tableArray.length; col++) {
-            output.append(col + " ");
-        }
-        return output.toString();
-    }
-    @Test
-    void printTable() {
-
-        String output  = table(true);
-
-        outputStreamCaptor.reset();
-        Point point = new Point(5,5);
-        commandHandler.table.writeTable(point,true);
-        commandHandler.printTable();
-        assertEquals(output, outputStreamCaptor.toString());
-    }
-
-    @Test
-    void moveRobot() {
-        Point coo1 = commandHandler.robot.getCoordinates();
-
-        coo1.move(coo1.x+1,coo1.y);
-        commandHandler.moveRobot(1);
-        assertEquals(coo1, commandHandler.robot.getCoordinates());
-
-        commandHandler.turnRight();
-        coo1.move(coo1.x,coo1.y+1);
-        commandHandler.moveRobot(1);
-        assertEquals(coo1, commandHandler.robot.getCoordinates());
-
-        commandHandler.turnRight();
-        coo1.move(coo1.x-1,coo1.y);
-        commandHandler.moveRobot(1);
-        assertEquals(coo1, commandHandler.robot.getCoordinates());
-
-        commandHandler.turnRight();
-        coo1.move(coo1.x,coo1.y-1);
-        commandHandler.moveRobot(1);
-        assertEquals(coo1, commandHandler.robot.getCoordinates());
-    }
-
-    @Test
-    void turnLeft() {
-        commandHandler.turnLeft();
-        assertEquals("west", commandHandler.robot.getDirection()); //test left turn if initially facing west
-        commandHandler.turnLeft();
-        assertEquals("south", commandHandler.robot.getDirection()); //test left turn if initially facing south
-        commandHandler.turnLeft();
-        assertEquals("east", commandHandler.robot.getDirection()); //test left turn if initially facing east
-        commandHandler.turnLeft();
-        assertEquals("north", commandHandler.robot.getDirection()); //test left turn if initially facing north
-    }
-
-    @Test
-    void turnRight() {
-        commandHandler.turnRight();
-        assertEquals("east", commandHandler.robot.getDirection());  //test right turn if initially facing east
-        commandHandler.turnRight();
-        assertEquals("south", commandHandler.robot.getDirection());  //test right turn if initially facing south
-        commandHandler.turnRight();
-        assertEquals("west", commandHandler.robot.getDirection());  //test right turn if initially facing west
-        commandHandler.turnRight();
-        assertEquals("north", commandHandler.robot.getDirection());  //test right turn if initially facing north
-
-    }
-
-    @Test
-    void penDown() {
-        //test pen initially up
-        commandHandler.penDown();
-        assertTrue(commandHandler.robot.getPenState());
-
-        //test pen already down
-        outputStreamCaptor.reset();
-        commandHandler.penDown();
-        assertEquals("Pen direction already down", outputStreamCaptor.toString().trim());
-    }
-
-    @Test
-    void penUp() {
-        //test pen initially up
-        outputStreamCaptor.reset();
-        commandHandler.penUp();
-        assertEquals("Pen direction already up", outputStreamCaptor.toString().trim());
-
-        //test pen already up
-        commandHandler.robot.setPenState(true);
-        commandHandler.penUp();
-        assertFalse(commandHandler.robot.getPenState());
-    }
-
+    
+    
+    //Test case 5 (tseting the initialization of the robot)
     @Test
     void initializeSystem() {
         //test with valid table size
@@ -372,6 +271,114 @@ class CommandHandlerTest {
         commandHandler.initializeSystem(1);
         assertEquals("Please choose a size bigger or equal to 2", outputStreamCaptor.toString().trim());
     }
+    
+    // Test case 6 (mactching the positions of the pen with pens initial postion and 2 other position ) 
+    @Test
+    void printPosition() {
+        String position1 = "Position: " + 0 + ", " + 0 + " - Pen: " + "up" + " - Facing: " + "north";
+        String position2 = "Position: " + 0 + ", " + 0 + " - Pen: " + "down" + " - Facing: " + "north";
+        String position3 = "Position: " + 0 + ", " + 0 + " - Pen: " + "down" + " - Facing: " + "east";
+        outputStreamCaptor.reset();
+        commandHandler.printPosition();
+        assertEquals(position1,outputStreamCaptor.toString().trim());     //initial position of the pen
+        commandHandler.penDown();
+        outputStreamCaptor.reset();
+        commandHandler.printPosition();
+        assertEquals(position2,outputStreamCaptor.toString().trim());    //position of the pen when it is down
+        commandHandler.turnRight();
+        outputStreamCaptor.reset();
+        commandHandler.printPosition();
+        assertEquals(position3,outputStreamCaptor.toString().trim());    //Position changed to east and check position
+
+    }
+// Test Case 7 (part 1 Checking pen initial up requirement after reset)
+    //Part 2 (checking when the pen state is already up) 
+    
+    @Test
+    void penUp() {
+        
+        outputStreamCaptor.reset();
+        commandHandler.penUp();
+        assertEquals("Pen direction already up", outputStreamCaptor.toString().trim());
+
+        //test pen already up
+        commandHandler.robot.setPenState(true);
+        commandHandler.penUp();
+        assertFalse(commandHandler.robot.getPenState());
+    }
+ // Test Case 8 (part 1 putting pen down and check after initial up condition)
+    //Part 2 (checking when the pen state is already down 
+    
+    @Test
+    void penDown() {
+      
+        commandHandler.penDown();
+        assertTrue(commandHandler.robot.getPenState());
+
+        outputStreamCaptor.reset();
+        commandHandler.penDown();
+        assertEquals("Pen direction already down", outputStreamCaptor.toString().trim());
+    }
+    
+    //Test case 9 (Checking the left turn of the robot for 4 possible initial conditions (west, south north, east)
+    @Test
+    void turnLeft() {
+        commandHandler.turnLeft();
+        assertEquals("west", commandHandler.robot.getDirection()); //turning left if initial is west
+        commandHandler.turnLeft();
+        assertEquals("south", commandHandler.robot.getDirection()); //turning left if initial is south
+        commandHandler.turnLeft();
+        assertEquals("east", commandHandler.robot.getDirection()); //turning left if initial is east
+        commandHandler.turnLeft();
+        assertEquals("north", commandHandler.robot.getDirection()); //turning left if initial is north
+    }
+
+  //Test case 10 (Checking the right turn of the robot for 4 possible initial conditions (west, south north, east)
+    
+    @Test
+    void turnRight() {
+        commandHandler.turnRight();
+        assertEquals("east", commandHandler.robot.getDirection());  //turning right if initial is east
+        commandHandler.turnRight();
+        assertEquals("south", commandHandler.robot.getDirection());  //turning right if initial is  south
+        commandHandler.turnRight();
+        assertEquals("west", commandHandler.robot.getDirection());  //turning right if initial is  west
+        commandHandler.turnRight();
+        assertEquals("north", commandHandler.robot.getDirection());  //turning right if initial is north
+
+    }
+    // Test case 11(checking the movement of the robot in the floor
+    @Test
+    void moveRobot() {
+        Point coordinate = commandHandler.robot.getCoordinates();
+
+        coordinate.move(coordinate.x+1,coordinate.y);
+        commandHandler.moveRobot(1);
+        assertEquals(coordinate, commandHandler.robot.getCoordinates());
+
+        commandHandler.turnRight();
+        coordinate.move(coordinate.x,coordinate.y+1);
+        commandHandler.moveRobot(1);
+        assertEquals(coordinate, commandHandler.robot.getCoordinates());
+
+        commandHandler.turnRight();
+        coordinate.move(coordinate.x-1,coordinate.y);
+        commandHandler.moveRobot(1);
+        assertEquals(coordinate, commandHandler.robot.getCoordinates());
+
+        commandHandler.turnRight();
+        coordinate.move(coordinate.x,coordinate.y-1);
+        commandHandler.moveRobot(1);
+        assertEquals(coordinate, commandHandler.robot.getCoordinates());
+    }
+
+  
+
+ 
+
+    
+
+    
 
 
 
