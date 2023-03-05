@@ -259,7 +259,7 @@ class CommandHandlerTest {
     }
     
     
-    //Test case 5 (tseting the initialization of the robot)
+    //Test case 5 (testing the initialization of the robot)
     @Test
     void initializeSystem() {
         //test with valid table size
@@ -272,7 +272,7 @@ class CommandHandlerTest {
         assertEquals("Please choose a size bigger or equal to 2", outputStreamCaptor.toString().trim());
     }
     
-    // Test case 6 (mactching the positions of the pen with pens initial postion and 2 other position ) 
+    // Test case 6 (matching the positions of the pen with pens initial position and 2 other position ) 
     @Test
     void printPosition() {
         String position1 = "Position: " + 0 + ", " + 0 + " - Pen: " + "up" + " - Facing: " + "north";
@@ -347,7 +347,7 @@ class CommandHandlerTest {
         assertEquals("north", commandHandler.robot.getDirection());  //turning right if initial is north
 
     }
-    // Test case 11(checking the movement of the robot in the floor
+    // Test case 11(checking the movement of the robot in the floor)
     @Test
     void moveRobot() {
         Point coordinate = commandHandler.robot.getCoordinates();
