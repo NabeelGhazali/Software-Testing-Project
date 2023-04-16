@@ -15,37 +15,38 @@ public class Table {
             width = x;
             height = y;
         }else{
-            //if initialization put negative value the it's set to 0
+            //if size is negative, table size is 0
             width=0;
             height=0;
             x=0;
             y=0;
         }
 
-        //array initialization
+        //initialize array
         tableArray = new int[x][y];
 
+        //initialize table with 0s
         for (int[] ints : tableArray) {
             Arrays.fill(ints, 0);
         }
 
     }
 
-    //checking the coordinate will fit in the table or not
+    //verify if a given coordinate is on the table
     public boolean isOnTable(Point coordinates) {
         double x = coordinates.getX();
         double y = coordinates.getY();
         return (x < width && x >= 0) && (y < height && y >= 0);
     }
 
-    //marking on the table based on the state of the pen
+    //write on table if pen is holding up
     public void writeTable(Point coordinates, boolean penState) {
         if(penState){
             tableArray[(int) coordinates.getX()][(int) coordinates.getY()]=1;
         }
     }
 
-    //get
+    //getters
     public int getWidth(){
         return width;
     }
@@ -56,8 +57,8 @@ public class Table {
         return tableArray;
     }
 
-    
-    //printing the table
+    //printer
+    //print the table
     public void printTable(Point coordinates,boolean penState){
         // prints the robot position along with the pen orientation
         for (int row = tableArray.length-1; row >= 0; row--) {

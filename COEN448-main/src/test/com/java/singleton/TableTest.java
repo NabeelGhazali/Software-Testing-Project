@@ -23,10 +23,53 @@ class TableTest {
     }
 
     @AfterEach
-    void TearDown() {
+    void tearDown() {
         System.setOut(standardOut);
     }
-    String table(boolean flag){
+
+    @Test
+    void testTableConstructor() {
+        table = new Table(-5,-5);
+        assertEquals(0, table.getHeight());
+    }
+
+    @Test
+    void testIsOnTable() {
+        //point on table
+        Point validPoint = new Point(5,5);
+        //point out of bound
+        Point invalidPoint = new Point(11,11);
+        assertAll(() -> assertTrue(table.isOnTable(validPoint)),        //Test valid point
+                () -> assertFalse(table.isOnTable(invalidPoint)));      //test invalid point
+    }
+
+    @Test
+    void testGetWidth() {
+        assertEquals(10,table.getWidth());
+    }
+
+    @Test
+    void testGetHeight() {
+        assertEquals(10,table.getHeight());
+    }
+
+    @Test
+    void testGetTableArray() {
+        //get expected array
+        int[][] tableArray = new int[10][10];
+
+        for (int row = 0; row < 10; row++)
+        {
+            for (int col = 0; col < 10; col++)
+            {
+                tableArray[row][col] = 0;
+            }
+        }
+
+        assertTrue(Arrays.deepEquals(tableArray, table.getTableArray()));
+    }
+
+    String getTableOutput(boolean flag){
         //get expected output
         StringBuilder output = new StringBuilder();
 
@@ -60,40 +103,20 @@ class TableTest {
         return output.toString();
     }
 
-   //test case 1 (checking the construction of table is valid or not if negative make 0 then assert zero with output)
-    
     @Test
-    void testTableConstructor() {
-        table = new Table(-3,-3);
-        assertEquals(0, table.getHeight());
-    }
-  //test case 2(checking the coordinates are on the table or not)
-    @Test
-    void testIsOnTable() {
-        //point on table
-        Point validPoint = new Point(2,2);
-        //point out of bound
-        Point invalidPoint = new Point(13,13);
-        assertAll(() -> assertTrue(table.isOnTable(validPoint)),        // valid point
-                () -> assertFalse(table.isOnTable(invalidPoint)));      // invalid point
-    }
-  
-    //test case 3 (checking the table array with initiate value)
-    @Test
-    void testGetTableArray() {
-        //get expected array
-        int[][] tableArray = new int[10][10];
+    void testPrintTable() {
 
-        for (int row = 0; row < 10; row++)
-        {
-            for (int col = 0; col < 10; col++)
-            {
-                tableArray[row][col] = 0;
-            }
-        }
+        String output = getTableOutput(true);
 
-        assertTrue(Arrays.deepEquals(tableArray, table.getTableArray()));
+        Point point = new Point(5,5);
+        table.writeTable(point,true);
+        Point temp=new Point(0,0); // location of pen
+        table.printTable(temp,false); // initially printing table with pen up at location 0,0
+        assertEquals(output, outputStreamCaptor.toString());
+
+        outputStreamCaptor.reset();
+        output = getTableOutput(false);
+        table.printTable(temp,true);
+        assertEquals(output, outputStreamCaptor.toString());
     }
-
-    
 }

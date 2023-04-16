@@ -4,26 +4,26 @@ import java.awt.*;
 
 public class Singleton {
     private static Singleton robot;
-    private boolean penState; //Pen state false means the pen is UP and Pen state true means Pen is Down
-    private Point coordinates; //coordinate of the robot on table(floor)
-    private String direction; // 4 possible directions
+    private boolean penState; //false: up, true: down
+    private Point coordinates; //coordinate of robot on table
+    private String direction; // North, East, South, West
 
     //constructor
     public Singleton(){
-       
+        //initialise robot
         this.penState = false;
         this.coordinates = new Point(0,0);
         this.direction = "north";
     }
 
-    //current instance of the robot
+    //get the current instance of the robot
     public static Singleton getInstance(){
         if (robot == null)
             robot = new Singleton();
         return robot;
     }
 
-    //get
+    //getters
     public String getDirection() {
         return this.direction;
     }
@@ -34,20 +34,19 @@ public class Singleton {
         return this.coordinates;
     }
 
-    //set
+    //setters
     public void setDirectionNorth(){
         this.direction = "north";
     }
     public void setDirectionSouth(){
         this.direction = "south";
     }
-    public void setDirectionWest(){
-        this.direction = "west";
-    }
     public void setDirectionEast(){
         this.direction = "east";
     }
-   
+    public void setDirectionWest(){
+        this.direction = "west";
+    }
     public void setPenState(boolean state){
         this.penState = state;
     }
