@@ -31,7 +31,7 @@ We have named our robot Jarvis and The robot have the ability of holding one pen
 
 ### Commands and their detailed meaning
 
-[N|n] To showup the total menu
+[MENU|menu] To showup the total menu
 
 [U|u] Pen up
 
